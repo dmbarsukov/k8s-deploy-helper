@@ -250,7 +250,7 @@ env:
 
 # Deploy Events
 
-Currently NewRelic, Slack, and Datadog deploy events are supported.
+Currently NewRelic, Slack, and Datadog, Instana, & Microsoft Teams deploy events are supported.
 
 In Gitlab for NewRelic, you'll need to add a secret variable with the NewRelic API key and App Ids
 for each stage you want a deployment event for. Like:
@@ -299,6 +299,40 @@ separated by commas.
 DATADOG_APP_KEY=xxx
 DATADOG_TAGS="deploys:api","foo:bar"
 DATADOG_TEXT=\n%%%\n### Success\n%%%
+```
+
+For Instana, you *must* set your Instana API Token & Instana Base URL with:
+
+```
+INSTANA_API_TOKEN=xxx
+INSTANA_BASE_URL=https://<dashboard-url>
+```
+
+Per Instana's docs it's important to note:
+
+    The used API Token requires the permission “Configuration of releases”.
+    A release has no scope and is therefore globally applied to the whole monitored system.
+
+Based on that last note you can set these variables at a group level and not have to manage them at the project level.
+
+
+For Teams, you can simply set a Gitlab secret variable with a [Teams Incoming Webhook](https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook#add-an-incoming-webhook-to-a-teams-channel) if you want notifications for every stage.
+
+```
+TEAMS_WEBHOOK=xxx
+```
+
+If you want notifications for specific stages use the following format.
+
+```
+TEAMS_{{STAGE}}_WEBHOOK=xxx
+```
+
+E.g.
+
+```
+TEAMS_STAGING_WEBHOOK=xxx
+TEAMS_PRODUCTION_WEBHOOK=xxx
 ```
 
 # Manifest-less Deploys
